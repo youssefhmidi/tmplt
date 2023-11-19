@@ -9,7 +9,7 @@
 
 </div>
 
-> Side note: tis is a side-project so I can learn rust even more
+> Side note: this is a side-project so I can learn rust even more
 > I just want to share it for others who can use it 
 > yes I'm a beginner so I would appreciate any feedbacks about the code 
 
@@ -21,7 +21,7 @@ working directories
 
 ## Why?
 
-One day I was making a golang backend that used a similar folder/file structure to another ![project](https://github.com/youssefhmidi/Backend_in_go) 
+One day I was making a golang backend that used a similar folder/file structure to another [project](https://github.com/youssefhmidi/Backend_in_go) 
 I had done, and the only issue I had was making the "folder structure", copy-pasting wasn't a great idea because I found myself tweaking a lot of 
 the original code so it would match the way I want it to be. what did I do after that? I did nothing, I rebuild the folders from scratch and it wasted
 a lot of time I would've wasted thinking should I use gorm or sqlx ( I did chose gorm and I was a mistake).
