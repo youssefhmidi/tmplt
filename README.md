@@ -31,5 +31,57 @@ commands like go mod init and others
 
 and basically that is the purpose of this templating language
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+hehe
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### Table of index
+
 [main](#why?)
