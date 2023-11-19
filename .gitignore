@@ -4,3 +4,4 @@
 test.tmplt
 
 Cargo.lock
+*.txt
