@@ -13,11 +13,11 @@
 > I just want to share it for others who can use it 
 > yes I'm a beginner so I would appreciate any feedbacks about the code 
 
-### templating language for creating folders structures
+# templating language for creating folders structures
 
 tmplt, a templating language (also a scripting language) for creating a reusable files that can be used to create a folders structures along side with
 some initial scripts (for js developper it would be "npm init -y"). this project is mainly focused on creating a file that can be used to setup
-working directories
+workspaces
 
 ## Why?
 
@@ -31,57 +31,10 @@ commands like go mod init and others
 
 and basically that is the purpose of this templating language
 
+# Getting started
+
+> for the moment, tmplt will only work for windows.
+
+## Instalation (windows)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-hehe
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Table of index
-
-[main](#why?)

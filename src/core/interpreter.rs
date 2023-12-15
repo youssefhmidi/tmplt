@@ -112,7 +112,7 @@ pub mod interpreter {
                 .clone()
                 .iter_mut()
                 .map(|v| v._serialize_to_cmd())
-                .collect::<Vec<ExecutableWindowCommand>>();
+                .collect::<Vec<ExecutableTerminalCommand>>();
 
             let mut tasks: Vec<Task> = vec![];
             let mut i: usize = 0;
@@ -334,13 +334,14 @@ pub mod interpreter {
     ///
     /// simple format (args, defered)
     #[derive(Debug, Clone)]
-    pub struct ExecutableWindowCommand(
+    pub struct ExecutableTerminalCommand(
         /// a vector of strings (`Vec<String>`) that represent the args to the command that will be run
         Vec<String>,
         /// this `boolean` represent if the current action should be executed in the order it is placed in
         /// or to run after all task has finished
         pub bool,
     );
+
 
     /// a named tuple to simplify the creatio of a file/directory
     ///
@@ -387,16 +388,39 @@ pub mod interpreter {
         }
     }
 
-    impl ExecutableCommand<CmdOut> for ExecutableWindowCommand {
+
+    impl ExecutableCommand<CmdOut> for ExecutableTerminalCommand {
+        #[cfg(target_os = "windows")]
         fn _execute(&self) -> Option<CmdOut> {
             let mut cmd = Command::new("cmd");
 
-            let command = cmd.args(self.0.clone());
+            let mut serilized = vec!["/C".to_owned()];
+            let mut args = self.0.clone();
+            serilized.append(&mut args);
+
+            let command = cmd.args(serilized);
             match command.output() {
                 Ok(raw_out) => {
                     let out = CmdOut::new(raw_out.stdout, raw_out.stderr);
                     Some(out)
                 }
+                Err(e) => {
+                    eprintln!("{e}");
+                    None
+                }
+            }
+        }
+
+        #[cfg(not(target_os = "windows"))]
+        fn _execute(&self) -> Option<CmdOut> {
+            let mut sh = Command::new("sh");
+
+            let command = sh.args(self.0.clone());
+            match command.output() {
+                Ok(out) => {
+                    let out = CmdOut::new(out.stdout, out.stderr);
+                    Some(out)
+                },
                 Err(e) => {
                     eprintln!("{e}");
                     None
@@ -436,18 +460,13 @@ pub mod interpreter {
                 defered,
             }
         }
-        /// serialize the command name and args into a `process::Command` type including if
-        /// it need to be defered or not
-        ///
-        /// this - for now - is for windows command line
-        /// I will try making a more general executable commands in the future.
-        ///
-        /// Note : this is a project to learn rust
-        pub fn _serialize_to_cmd(&mut self) -> ExecutableWindowCommand {
-            let mut serilized_args = vec!["/C".to_string(), self.command_name.clone()];
+
+        pub fn _serialize_to_cmd(&mut self) -> ExecutableTerminalCommand {
+            let mut serilized_args = vec![self.command_name.clone()];
             serilized_args.append(&mut self._args);
 
-            ExecutableWindowCommand(serilized_args, self.defered)
+            ExecutableTerminalCommand(serilized_args, self.defered)
         }
+
     }
 }
