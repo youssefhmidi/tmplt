@@ -58,11 +58,47 @@ if you would want to initialize a new .tmplt file, you can either create it your
 tmplt new 'filename'.tmplt
 
 ```
-it will copy into it a demonstration of the tmplt sections and few keywords
+it will contain a demonstration of the tmplt sections and keywords.
 
 ## Syntax
-
 there are 4 sections: **__CWD** ,**__VAR**, **__DEMO** and **__SCRIPTS**.
 and there are 6 keywords: Assign( the "=" symbol),the "#" symbol, DEFER, COPY_INTO, FILE and FOLDER
 
 ### CWD, current working directory section
+example code of a CWD section
+```
+__CWD:
+    FOLDER out\
+    FOLDER include\
+    FILE main.c
+```
+Basicaly a section where you declare folder structures and files.
+
+the files/folders you declare here are going to be created in the same directory the `tmplt` command where executed,
+for example:
+
+the previouse example will produce the following directory:
+
+```bash
+├─out\
+├─include\
+├─main.c
+├─example.tmplt # this is the file that contains the code
+```
+
+#### DEFER keyword
+well, for ordering purposes the DEFER keyword objectif is to order which folders/files should be created last or first.
+consider the following example:
+```
+__CWD:
+    FOLDER out\
+    FOLDER include\
+    DEFER src\
+    DEFER src\.test\
+    FILE main.c
+```
+the order of the execusion will be different, hence we will have the next order
+```
+create folder out->create folder include->create file main.c->create folder src\->create folder src\.test
+```
+
