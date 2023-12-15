@@ -51,7 +51,7 @@ tmplt help
 ```
 
 it should show you a help text telling you about the command.
-if you would want to initialize a new .tmplt file, you can either create it your self or use the next command
+if you would want to initialize a new .tmplt file, you can either create it your self or use the following command
 
 ```bash
 
@@ -62,7 +62,7 @@ it will copy into it a demonstration of the tmplt sections and few keywords
 
 ## Syntax
 
-there are 4 sections: *__CWD* ,*__VAR*, *__DEMO* and *__SCRIPTS*.
+there are 4 sections: **__CWD** ,**__VAR**, **__DEMO** and **__SCRIPTS**.
 and there are 6 keywords: Assign( the "=" symbol),the "#" symbol, DEFER, COPY_INTO, FILE and FOLDER
 
 ### CWD, current working directory section
