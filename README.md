@@ -35,6 +35,34 @@ and basically that is the purpose of this templating language
 
 > for the moment, tmplt will only work for windows.
 
-## Instalation (windows)
+## Installation (windows)
 
+for installation go to the releases section of this repository, download the .zip file and then extract it.
+you can use it like this but if you would like to have the command available anywhere, you can add it to your PATH envirement variables.
 
+## welcome to .tmplt
+
+start by this command
+
+```bash
+
+tmplt help
+
+```
+
+it should show you a help text telling you about the command.
+if you would want to initialize a new .tmplt file, you can either create it your self or use the next command
+
+```bash
+
+tmplt new 'filename'.tmplt
+
+```
+it will copy into it a demonstration of the tmplt sections and few keywords
+
+## Syntax
+
+there are 4 sections: *__CWD* ,*__VAR*, *__DEMO* and *__SCRIPTS*.
+and there are 6 keywords: Assign( the "=" symbol),the "#" symbol, DEFER, COPY_INTO, FILE and FOLDER
+
+### CWD, current working directory section
