@@ -8,6 +8,21 @@
 ![Static Badge](https://img.shields.io/badge/license-MIT-red)
 
 </div>
+# table of index
+*before reading you may want to install it 'check releases ;) '*
+
+- [table of index](#table-of-index)
+- [templating language for creating folders structures](#templating-language-for-creating-folders-structures)
+  - [Why?](#why)
+- [Getting started](#getting-started)
+  - [Installation (windows)](#installation-windows)
+  - [welcome to .tmplt](#welcome-to-tmplt)
+- [Syntax](#syntax)
+  - [CWD. current working directory section](#cwd-current-working-directory-section)
+    - [DEFER keyword](#defer-keyword)
+  - [DEMO.](#demo)
+  - [SCRIPTS.](#scripts)
+  - [VAR. well, here your variables are declared](#var-well-here-your-variables-are-declared)
 
 > Side note: this is a side-project so I can learn rust even more
 > I just want to share it for others who can use it 
@@ -31,23 +46,6 @@ commands like go mod init and others
 
 and basically that is the purpose of this templating language
 
-# table of index
-### before reading you may want to install it 'check releases ;) '
-
-[getting started](#getting-started)
-- [templating language for creating folders structures](#templating-language-for-creating-folders-structures)
-  - [Why?](#why)
-- [table of index](#table-of-index)
-    - [before reading you may want to install it 'check releases ;) '](#before-reading-you-may-want-to-install-it-check-releases--)
-- [Getting started](#getting-started)
-  - [Installation (windows)](#installation-windows)
-  - [welcome to .tmplt](#welcome-to-tmplt)
-- [Syntax](#syntax)
-  - [CWD. current working directory section](#cwd-current-working-directory-section)
-    - [DEFER keyword](#defer-keyword)
-  - [DEMO.](#demo)
-  - [SCRIPTS.](#scripts)
-  - [VAR. well, here your variables are declared](#var-well-here-your-variables-are-declared)
 
 # Getting started
 
@@ -106,6 +104,8 @@ the previouse example will produce the following directory:
 ```
 
 ### DEFER keyword
+> Pre-Note: the DEFER keyword can be used everywhere and anywhere
+
 well, for ordering purposes the DEFER keyword objectif is to order which folders/files should be created last or first.
 consider the following example:
 ```
