@@ -60,11 +60,11 @@ tmplt new 'filename'.tmplt
 ```
 it will contain a demonstration of the tmplt sections and keywords.
 
-## Syntax
+# Syntax
 there are 4 sections: **__CWD** ,**__VAR**, **__DEMO** and **__SCRIPTS**.
 and there are 6 keywords: Assign( the "=" symbol),the "#" symbol, DEFER, COPY_INTO, FILE and FOLDER
 
-### CWD, current working directory section
+## CWD. current working directory section
 example code of a CWD section
 ```
 __CWD:
@@ -72,9 +72,9 @@ __CWD:
     FOLDER include\
     FILE main.c
 ```
-Basicaly a section where you declare folder structures and files.
+Basicaly a section where you declare folder and files names.
 
-the files/folders you declare here are going to be created in the same directory the `tmplt` command where executed,
+the files/folders you declare here are going to be created in the same directory as the `tmplt` command where executed,
 for example:
 
 the previouse example will produce the following directory:
@@ -86,7 +86,7 @@ the previouse example will produce the following directory:
 ├─example.tmplt # this is the file that contains the code
 ```
 
-#### DEFER keyword
+### DEFER keyword
 well, for ordering purposes the DEFER keyword objectif is to order which folders/files should be created last or first.
 consider the following example:
 ```
@@ -99,6 +99,34 @@ __CWD:
 ```
 the order of the execusion will be different, hence we will have the next order
 ```
-create folder out->create folder include->create file main.c->create folder src\->create folder src\.test
+create folder out->create folder include->create file main.c
+->create folder src\->create folder src\.test
 ```
+## DEMO.
+--insert content here--
+## SCRIPTS.
+--insert content here--
+## VAR. well, here you variables are declared
+> NOTE: before you continue, these are not variables, they are constants, sorry to break it for ya.
 
+here, you can define variables that you can use multiple times.
+example :
+```
+__VAR:
+    libs_path = /path/to/libs/
+    build_scripts = /path/to/build/
+
+...
+
+// and later use it, for example
+__DEMO:
+    #libs_path COPY_INTO ./include
+
+...
+
+__SCRIPT:
+    // imagine a build tool with the possibility of configuring it using a config file
+    // or a build file
+    yourbuildtool compile --import=#build_scripts
+```
+as you can see variables are prifexed with '#' so the interpreter can replace them with the variable value
