@@ -31,9 +31,28 @@ commands like go mod init and others
 
 and basically that is the purpose of this templating language
 
+# table of index
+### before reading you may want to install it 'check releases ;) '
+
+[getting started](#getting-started)
+- [templating language for creating folders structures](#templating-language-for-creating-folders-structures)
+  - [Why?](#why)
+- [table of index](#table-of-index)
+    - [before reading you may want to install it 'check releases ;) '](#before-reading-you-may-want-to-install-it-check-releases--)
+- [Getting started](#getting-started)
+  - [Installation (windows)](#installation-windows)
+  - [welcome to .tmplt](#welcome-to-tmplt)
+- [Syntax](#syntax)
+  - [CWD. current working directory section](#cwd-current-working-directory-section)
+    - [DEFER keyword](#defer-keyword)
+  - [DEMO.](#demo)
+  - [SCRIPTS.](#scripts)
+  - [VAR. well, here your variables are declared](#var-well-here-your-variables-are-declared)
+
 # Getting started
 
-> for the moment, tmplt will only work for windows.
+> for the moment, the tmplt ready-for-use binary will only work for windows.
+> if you would like to use you may want to self compile it 
 
 ## Installation (windows)
 
@@ -106,7 +125,7 @@ create folder out->create folder include->create file main.c
 --insert content here--
 ## SCRIPTS.
 --insert content here--
-## VAR. well, here you variables are declared
+## VAR. well, here your variables are declared
 > NOTE: before you continue, these are not variables, they are constants, sorry to break it for ya.
 
 here, you can define variables that you can use multiple times.
@@ -120,7 +139,8 @@ __VAR:
 
 // and later use it, for example
 __DEMO:
-    #libs_path COPY_INTO ./include
+    // defering it so we make sure the ./include file does exist
+    DEFER #libs_path COPY_INTO ./include
 
 ...
 
