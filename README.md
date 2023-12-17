@@ -8,6 +8,7 @@
 ![Static Badge](https://img.shields.io/badge/license-MIT-red)
 
 </div>
+
 # table of index
 *before reading you may want to install it 'check releases ;) '*
 
