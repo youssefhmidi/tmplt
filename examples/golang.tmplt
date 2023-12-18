@@ -1,0 +1,18 @@
+__VAR :
+    first_arg = package/name           
+
+__CWD :
+    // when making a file or creating an empty folder consider making it here
+    // and do not do it manually in __CMD section
+
+    FOLDER database\ 
+    // it is also prefered to use back slash '\' (Windows only 'I guess')
+
+    FOLDER pkg\
+    FOLDER internals\
+    FILE main.go
+
+__CMD :
+    // comment is initilized using '//' and the entire line is ignored
+    go mod init #first_arg
+    DEFER echo hello

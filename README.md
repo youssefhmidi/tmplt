@@ -10,7 +10,7 @@
 </div>
 
 # table of index
-*before reading you may want to install it 'check releases ;) '*
+  **before reading if you  want to install it go check releases ;)**
 
 - [table of index](#table-of-index)
 - [templating language for creating folders structures](#templating-language-for-creating-folders-structures)
@@ -24,6 +24,9 @@
   - [DEMO.](#demo)
   - [SCRIPTS.](#scripts)
   - [VAR. well, here your variables are declared](#var-well-here-your-variables-are-declared)
+- [CLI commands](#cli-commands)
+- [tmplt internals](#tmplt-internals)
+- [self compiling / feedbacks](#self-compiling--feedbacks)
 
 > Side note: this is a side-project so I can learn rust even more
 > I just want to share it for others who can use it 
@@ -123,7 +126,33 @@ create folder out->create folder include->create file main.c
 ->create folder src\->create folder src\.test
 ```
 ## DEMO.
---insert content here--
+your good looking wrokdir is ready and you want to start coding. But, unfortunalty your files are empty and you wish there are some demostrations or
+some sort of starting point that you would love to start from.
+
+**Enter __DEMO**
+the `__DEMO` section's whole purpose is to do just what we discussed. make the files not empty
+
+for example:
+```
+__DEMO:
+    DEFER path/to/demo_code.c COPY_INTO ./useful_utils/utils.rs
+    path/to/config.yaml COPY_INTO ./copied_config.yaml
+``` 
+
+the example above will produce the next directory
+
+```bash
+    .
+    ├──copied_config.yaml
+    ├──useful_utils
+    │  ├───utils.rs
+    .
+    .
+```
+
+> It is also preferable to make the COPY_INTO action defered if you're confused 
+> about in wich order -file then folder or the opposite- the folder will exist -assuming the folder is yet to be created-
+
 ## SCRIPTS.
 --insert content here--
 ## VAR. well, here your variables are declared
@@ -151,3 +180,7 @@ __SCRIPT:
     yourbuildtool compile --import=#build_scripts
 ```
 as you can see variables are prifexed with '#' so the interpreter can replace them with the variable value
+
+# CLI commands
+# tmplt internals
+# self compiling / feedbacks
