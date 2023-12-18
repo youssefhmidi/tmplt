@@ -150,8 +150,8 @@ the example above will produce the next directory
     .
 ```
 
-> It is also preferable to make the COPY_INTO action defered if you're confused 
-> about in wich order -file then folder or the opposite- the folder will exist -assuming the folder is yet to be created-
+> It is also preferable to make the COPY_INTO action defered if you're unsure --assuming the folder is yet to be created--
+> about in wich order the folder/file will be created. (file then folder or the opposite)
 
 ## SCRIPTS.
 --insert content here--
@@ -170,7 +170,7 @@ __VAR:
 // and later use it, for example
 __DEMO:
     // defering it so we make sure the ./include file does exist
-    DEFER #libs_path COPY_INTO ./include
+    DEFER #libs_path/mylib.h COPY_INTO ./include
 
 ...
 
