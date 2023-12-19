@@ -254,19 +254,19 @@ tmplt gen big-template.tmplt --batch-size=20
 # tmplt internals
 tmplt executing cycle is as follow:
 ![tmplt executing cycle](https://github.com/youssefhmidi/tmplt/blob/main/.assets/2.png)
-<i align="center">
+<div align="center">
 
-Image made using [Excalidraw](https://excalidraw.com/) 
+*Image made using [Excalidraw](https://excalidraw.com/)*  
 
-</i>
+</div>
 
 And we can visualize the syntax tree using the following image;
 ![tmplt syntax tree](https://github.com/youssefhmidi/tmplt/blob/main/.assets/3.png)
-<i align="center">
+<div align="center">
 
-Image also made using ![Excalidraw](https://excalidraw.com/), thanks for creating this amazing website
+*Image also made using [Excalidraw](https://excalidraw.com/), thanks for creating this amazing website*
 
-</i>
+</div>
 
 In the first image you can see that there are 8 general steps:
   - 1: Reading the file the passed in the args nad constructing a syntax tree.
