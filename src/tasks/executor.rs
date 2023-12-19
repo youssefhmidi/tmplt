@@ -89,11 +89,21 @@ pub mod task_executor {
 
             if self.batch_size >= self._task_schedular.len() {
                 self.current_iterations += 1;
-                let next_batch: Vec<Task> = self
+                let mut next_batch: Vec<Task> = self
                     ._task_schedular
                     .clone()
                     .take_while(|v| !v.defered || self.switch)
                     .collect();
+                    // a filter if the batch size is bigger than tasks and to filter only defered tasks
+                    if self.switch {
+                        let mut filtered = next_batch
+                            .iter()
+                            .filter(|v| v.defered)
+                            .map(|v| v.to_owned())
+                            .collect::<Vec<Task>>();
+                        next_batch.clear();
+                        next_batch.append(&mut filtered);
+                    }
 
                 let leftover_batch: Vec<Task> =
                     self._task_schedular.clone().filter(|t| t.defered).collect();
@@ -104,6 +114,10 @@ pub mod task_executor {
                     let temp = self.temp_buf.clone();
                     self.temp_buf.clear();
                     return Some(temp);
+                }
+
+                if next_batch.len() == 0 {
+                    return None;
                 }
 
                 return Some(next_batch);

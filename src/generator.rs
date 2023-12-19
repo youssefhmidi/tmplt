@@ -1,12 +1,14 @@
 use crate::arg_parser::args::Options;
 use crate::core;
 use crate::Parser;
+use crate::logformat;
+use crate::logger::writer::LogStatus;
 use crate::logger::writer::LogWriter;
 use crate::tasks::OpArcMutex;
 use crate::tasks::TasksExecutor;
 use crate::tasks::{execute_batch, ThreadResult, ExecutionError, TaskError};
 
-fn execute(mut outs: Vec<Result<ThreadResult, ExecutionError>>, executor: &mut TasksExecutor) {
+fn execute(mut outs: Vec<Result<ThreadResult, ExecutionError>>, executor: &mut TasksExecutor) -> Result<(), ExecutionError>{
     for task_batch in executor {
         let out = execute_batch(task_batch);
         outs.push(out)
@@ -16,7 +18,7 @@ fn execute(mut outs: Vec<Result<ThreadResult, ExecutionError>>, executor: &mut T
 
     let thread_results = match outs{
         Ok(res) => res,
-        Err(e) => return eprintln!("{e:?}"),
+        Err(e) => return Err(e),
     };
 
     let mut op_errors: Vec<Option<TaskError>> = vec![];
@@ -31,6 +33,7 @@ fn execute(mut outs: Vec<Result<ThreadResult, ExecutionError>>, executor: &mut T
             None => ()
         }
     }).collect::<Vec<_>>();
+    Ok(())
 }
 
 pub fn generate(args: Options, logger: OpArcMutex<LogWriter>) {
@@ -48,7 +51,13 @@ pub fn generate(args: Options, logger: OpArcMutex<LogWriter>) {
     let mut interpreter = match out {
         Ok(vect) => {
             
-            let tree = core::construct_tree(vect).unwrap();
+            let tree = match core::construct_tree(vect){
+                Ok(t) => t,
+                Err(e) => {
+                    let err: String = LogStatus::Error.into();
+                    return println!("{}{e}, hint: when creating a section make sure to seperate the ':' from the section name", logformat!("", err));
+                },
+            };
 
             let mut interpreter =core::construct_interpreter(tree);
             match interpreter.interpret() {
@@ -65,9 +74,14 @@ pub fn generate(args: Options, logger: OpArcMutex<LogWriter>) {
     };
 
     // first iteration
-    execute(vec![], &mut executor);
+    match execute(vec![], &mut executor){
+        Ok(()) => (),
+        Err(e) => return eprintln!("{e:?}")
+    }
     
-    executor.toggle_switch();
     // second iteration
-    execute(vec![], &mut executor);
+    match execute(vec![], &mut executor.toggle_switch()){
+        Ok(()) => (),
+        Err(e) => return eprintln!("{e:?}")
+    }
 }

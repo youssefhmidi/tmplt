@@ -237,7 +237,8 @@ pub mod interpreter {
                     format!("unable to interpret line {} in the demo section, found an unexpected token .", line+1).as_str()));
                 }
 
-                let filtered = node
+                if cfg!(target_os = "windows") {
+                    let filtered = node
                     .get_words()
                     .iter()
                     .map(|v| {
@@ -247,15 +248,14 @@ pub mod interpreter {
                     .filter(|v| v.contains('/'))
                     .map(|v| v.clone())
                     .collect::<Vec<String>>();
-
-                if filtered.len() != 0 {
-                    return Err(InterpreterError::new(
-                        err,
+                
+                    if filtered.len() != 0 {
+                        return Err(InterpreterError::new(err,
                         format!("make sure to use backslashes '\\' error occurs at {}", line)
-                            .as_str(),
-                    ));
+                                .as_str(),
+                            ));
+                    }
                 }
-
                 let args: Vec<String> = node
                     .get_words()
                     .iter()
