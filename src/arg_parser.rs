@@ -193,6 +193,10 @@ pub mod args {
                 options.file = Some(file[0].clone());
             }
 
+            if self.args.len() == 0 {
+                return Err(ParsingError { reason: "no command has been passed, help: Existing commands; help, generate and new".to_owned() });
+            }
+
             options.command = CommandLineArgs::from(self.args[0].clone());
 
             for flag in flags_vec {

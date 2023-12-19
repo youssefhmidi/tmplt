@@ -54,7 +54,11 @@ fn main() {
     match args.get_command() {
         CommandLineArgs::New => {
             let f = match args.get_file() {
-                Some(f) =>fs::copy(format!("{}\\..\\etc\\default.tmplt", parent.display()), f),
+                Some(f) =>{
+                    let info: String = LogStatus::Info.into();
+                    println!("{}initializing a new .tmplt file", logformat!("",info));
+                    fs::copy(format!("{}\\..\\etc\\default.tmplt", parent.display()), f)
+                },
                 None => {
                     let warn: String = LogStatus::Warning.into();
                     println!("{}", logformat!("if you would like to initialize a new .tmplt file with any other name dont forget to include the ext as a seconde argument", warn));

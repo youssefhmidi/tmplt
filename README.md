@@ -25,6 +25,7 @@
   - [SCRIPTS.](#scripts)
   - [VAR. well, here your variables are declared](#var-well-here-your-variables-are-declared)
 - [CLI commands](#cli-commands)
+- [a prefered way of using .tmplt](#a-prefered-way-of-using-tmplt)
 - [tmplt internals](#tmplt-internals)
 - [self compiling / feedbacks](#self-compiling--feedbacks)
 
@@ -182,5 +183,6 @@ __SCRIPT:
 as you can see variables are prifexed with '#' so the interpreter can replace them with the variable value
 
 # CLI commands
+# a prefered way of using .tmplt
 # tmplt internals
 # self compiling / feedbacks
