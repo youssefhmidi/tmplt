@@ -1,0 +1,2 @@
+__SCRIPTS :
+    npx create-next-app@latest ./app --ts --app --no-src-dir --import-alias '@/* --use-npm --tailwind --no-eslint

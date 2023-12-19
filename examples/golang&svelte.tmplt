@@ -1,0 +1,15 @@
+__VAR :
+    package = pakage/name
+    dep1 = github.com/labstack/echo/v4
+    dep2 = github.com/jmoiron/sqlx
+
+__CWD :
+    // app dir for the sveltekit app
+    FOLDER app\
+    FOLDER bin\
+
+__SCRIPTS :
+    cd bin\ && go mod init #package
+    cd bin\ && go get #dep1
+    cd bin\ && go get #dep2
+    
