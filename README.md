@@ -212,19 +212,19 @@ __SCRIPT:
 as you can see variables are prifexed with '#' so the interpreter can replace them with the variable value
 
 # CLI command
-after reading about the syntax you may want to use. well, it is pretty easy to use.
+after reading about the syntax you may want to use tmplt for the rest of your life 'hopefully'. well, it is pretty easy to use.
 
 if you want some help you can use the next command and it will show you all commands/flags and additional information
 ```bash
-    tmplt help
+tmplt help
 ```
 ## new/init command
 usage: initialize a new tmplt file with default example and sections
 example :
 ```bash
-    tmplt new
+tmplt new
     # or
-    tmplt init
+tmplt init
 ``` 
 usecases: file name, specifiy the file name along with the .tmplt extension. otherwise it just makes a default `new.tmplt` file
 e.g.: `tmplt new filename.tmplt`
@@ -237,16 +237,16 @@ flags:
     save the commands output into logs. can be found in the directory if not found the logs folder get created
 example:
 ```bash
-    tmplt generate template.tmplt --save-logs
-    # or 
-    tmplt gen template.tmplt --logged
+tmplt generate template.tmplt --save-logs
+        # or 
+tmplt gen template.tmplt --logged
 ```     
 --batch-size(alias --task-num): default: 10
     the tmplt execute commands (files/folders creation, scripts and coping demo files) asynchronously. a specified number of tasks 
     (also refered to as batches) get executed per thread.
 example:
 ```bash
-    tmplt gen big-template.tmplt --batch-size=20
+tmplt gen big-template.tmplt --batch-size=20
 ```
 
 > Future Idea: more flags / more features, e.g 'tmplt new --template-url=git-url'
@@ -254,32 +254,27 @@ example:
 # tmplt internals
 tmplt executing cycle is as follow:
 ![tmplt executing cycle](https://github.com/youssefhmidi/tmplt/blob/main/.assets/2.png)
-*image made using [Excalidraw](https://excalidraw.com/)*
+<div style="text-align: center;" markdown="1">*Image made using [Excalidraw](https://excalidraw.com/)* </div>
 
-and we can visualize the syntax treeusing the following image;
+And we can visualize the syntax tree using the following image;
 ![tmplt syntax tree](https://github.com/youssefhmidi/tmplt/blob/main/.assets/3.png)
-*image also made using [Excalidraw](https://excalidraw.com/), thanks for creating this amazing website*
+<div style="text-align: center;" markdown="1">*Image also made using [Excalidraw](https://excalidraw.com/), thanks for creating this amazing website*</div>
 
-in the first image you can see that there are 8 general steps:
-  - 1: reading the file the passed in the args nad constructing a syntax tree.
-  - 2: storing variables into a buffer. -- a hashmap of structure {var_name:var_value} --
-  - 3: translating the commands in the tmplt file into terminal/fs actions --a terminal command, fs create file or folder or a fs copy--.
-  - 4: storing variables and commands into a struct.
-  - 5: making a task buffers and serializing the commands and storing them to the buffer.
-  - 6: executing batches of tasks asynchronously -the size of a batch is default to 10 and can be changed through a flag, see [this section](#generate-command)-
-  - 7 and 8: the actual execution and writing to stdout.
+In the first image you can see that there are 8 general steps:
+  - 1: Reading the file the passed in the args nad constructing a syntax tree.
+  - 2: Storing variables into a buffer. -- a hashmap of structure {var_name:var_value} --
+  - 3: Translating the commands in the tmplt file into terminal/fs actions --a terminal command, fs create file or folder or a fs copy--.
+  - 4: Storing variables and commands into a struct.
+  - 5: Making a task buffers and serializing the commands and storing them to the buffer.
+  - 6: Executing batches of tasks asynchronously -the size of a batch is default to 10 and can be changed through a flag, see [this section](#generate-command)-
+  - 7 and 8: The actual execution and writing to stdout.
 
-the second image represent how the tmplt file is loaded into memory.
-syntax tree terminology -- not to be confused with AST --
-
-root level: the entire file.
-
-branches: sections, and there are only 4.
-
-node: a node is the entire line.
-
+The second image represent how the tmplt file is loaded into memory.  
+Syntax Tree terminology -- not to be confused with AST --  
+root level: the entire file.  
+branches: sections, and there are only 4.  
+node: a node is the entire line.  
 token: token represent a word
-
 # a prefered way of using .tmplt
 
 # self compiling / feedbacks
