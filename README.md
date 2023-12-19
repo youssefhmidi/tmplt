@@ -277,12 +277,14 @@ In the first image you can see that there are 8 general steps:
   - 6: Executing batches of tasks asynchronously -the size of a batch is default to 10 and can be changed through a flag, see [this section](#generate-command)-
   - 7 and 8: The actual execution and writing to stdout.
 
+
 The second image represent how the tmplt file is loaded into memory.  
 Syntax Tree terminology -- not to be confused with AST --  
-root level: the entire file.  
-branches: sections, and there are only 4.  
-node: a node is the entire line.  
-token: token represent a word
+
+**root level** : the entire file.  
+**branches** : sections, and there are only 4.  
+**node** : a node is the entire line.  
+**token** : token represent a word
 # a prefered way of using .tmplt
 
 # self compiling / feedbacks
