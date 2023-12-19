@@ -155,7 +155,34 @@ the example above will produce the next directory
 > about in wich order the folder/file will be created. (file then folder or the opposite)
 
 ## SCRIPTS.
---insert content here--
+the `__SCRIPTS` section is responsible for defining scripts that should be run to fully setup a workspace,
+for example you may want to make a svelte and golang app
+well take the following example:
+
+```
+__VAR :
+    ...
+    package = pakage/name
+    dep1 = github.com/labstack/echo/v4
+    dep2 = github.com/jmoiron/sqlx
+...
+
+__SCRIPTS :
+    ...
+    // 1
+    go mod init #package 
+    // 2
+    go get #dep1
+    // 3
+    go get #dep2
+    ...
+```
+with the previews example we told tmplt to run this commands in order -- 1 then 2 then 3 --
+and for the last step, creating svelte kit, unfortunatly, I didn't find a way to programmatically make a sveltkit project,
+if you have a solution you can create an Issue / PR and I will merge it after reviewing it.
+
+> Note: this is not a ready to use tool it is still very immature and needs proper testing and more optimizations
+
 ## VAR. well, here your variables are declared
 > NOTE: before you continue, these are not variables, they are constants, sorry to break it for ya.
 
