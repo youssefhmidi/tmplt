@@ -24,9 +24,11 @@
   - [DEMO.](#demo)
   - [SCRIPTS.](#scripts)
   - [VAR. well, here your variables are declared](#var-well-here-your-variables-are-declared)
-- [CLI commands](#cli-commands)
-- [a prefered way of using .tmplt](#a-prefered-way-of-using-tmplt)
+- [CLI command](#cli-command)
+  - [new/init command](#newinit-command)
+  - [generate command](#generate-command)
 - [tmplt internals](#tmplt-internals)
+- [a prefered way of using .tmplt](#a-prefered-way-of-using-tmplt)
 - [self compiling / feedbacks](#self-compiling--feedbacks)
 
 > Side note: this is a side-project so I can learn rust even more
@@ -55,7 +57,7 @@ and basically that is the purpose of this templating language
 # Getting started
 
 > for the moment, the tmplt ready-for-use binary will only work for windows.
-> if you would like to use you may want to self compile it 
+> if you would like to use you may want to self compile it, check [self compiling section](#self-compiling--feedbacks)
 
 ## Installation (windows)
 
@@ -209,7 +211,75 @@ __SCRIPT:
 ```
 as you can see variables are prifexed with '#' so the interpreter can replace them with the variable value
 
-# CLI commands
-# a prefered way of using .tmplt
+# CLI command
+after reading about the syntax you may want to use. well, it is pretty easy to use.
+
+if you want some help you can use the next command and it will show you all commands/flags and additional information
+```bash
+    tmplt help
+```
+## new/init command
+usage: initialize a new tmplt file with default example and sections
+example :
+```bash
+    tmplt new
+    # or
+    tmplt init
+``` 
+usecases: file name, specifiy the file name along with the .tmplt extension. otherwise it just makes a default `new.tmplt` file
+e.g.: `tmplt new filename.tmplt`
+
+## generate command
+aliases: gen or g
+usage: interpret the file and generate te directory the file describes also runs the scrips/make files&folders and copy into files
+flags: 
+--save-logs(alias --sl or --logged): default: false
+    save the commands output into logs. can be found in the directory if not found the logs folder get created
+example:
+```bash
+    tmplt generate template.tmplt --save-logs
+    # or 
+    tmplt gen template.tmplt --logged
+```     
+--batch-size(alias --task-num): default: 10
+    the tmplt execute commands (files/folders creation, scripts and coping demo files) asynchronously. a specified number of tasks 
+    (also refered to as batches) get executed per thread.
+example:
+```bash
+    tmplt gen big-template.tmplt --batch-size=20
+```
+
+> Future Idea: more flags / more features, e.g 'tmplt new --template-url=git-url'
+
 # tmplt internals
+tmplt executing cycle is as follow:
+![tmplt executing cycle](https://github.com/youssefhmidi/tmplt/blob/main/.assets/2.png)
+*image made using [Excalidraw](https://excalidraw.com/)*
+
+and we can visualize the syntax treeusing the following image;
+![tmplt syntax tree](https://github.com/youssefhmidi/tmplt/blob/main/.assets/3.png)
+*image also made using [Excalidraw](https://excalidraw.com/), thanks for creating this amazing website*
+
+in the first image you can see that there are 8 general steps:
+  - 1: reading the file the passed in the args nad constructing a syntax tree.
+  - 2: storing variables into a buffer. -- a hashmap of structure {var_name:var_value} --
+  - 3: translating the commands in the tmplt file into terminal/fs actions --a terminal command, fs create file or folder or a fs copy--.
+  - 4: storing variables and commands into a struct.
+  - 5: making a task buffers and serializing the commands and storing them to the buffer.
+  - 6: executing batches of tasks asynchronously -the size of a batch is default to 10 and can be changed through a flag, see [this section](#generate-command)-
+  - 7 and 8: the actual execution and writing to stdout.
+
+the second image represent how the tmplt file is loaded into memory.
+syntax tree terminology -- not to be confused with AST --
+
+root level: the entire file.
+
+branches: sections, and there are only 4.
+
+node: a node is the entire line.
+
+token: token represent a word
+
+# a prefered way of using .tmplt
+
 # self compiling / feedbacks
