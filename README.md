@@ -254,7 +254,7 @@ tmplt gen big-template.tmplt --batch-size=20
 # tmplt internals
 tmplt executing cycle is as follow:
 ![tmplt executing cycle](https://github.com/youssefhmidi/tmplt/blob/main/.assets/2.png)
-<div align="center">
+<i align="center">
 
 Image made using [Excalidraw](https://excalidraw.com/) 
 
