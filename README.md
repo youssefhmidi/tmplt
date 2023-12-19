@@ -44,7 +44,7 @@ workspaces
 One day I was making a golang backend that used a similar folder/file structure to another [project](https://github.com/youssefhmidi/Backend_in_go) 
 I had done, and the only issue I had was making the "folder structure", copy-pasting wasn't a great idea because I found myself tweaking a lot of 
 the original code so it would match the way I want it to be. what did I do after that? I did nothing, I rebuild the folders from scratch and it wasted
-a lot of time I would've wasted thinking should I use gorm or sqlx ( I did chose gorm and I was a mistake).
+a lot of time I would've wasted thinking should I use gorm or sqlx ( I did chose gorm and it was a mistake).
 
 so after that I decided to make a cli tool that would take a file containing all the information about where files should be and execute some
 commands like go mod init and others
