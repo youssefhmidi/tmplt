@@ -7,8 +7,8 @@ pub mod interpreter {
     use crate::core::Tokens::{SectionIdentity, Token};
     use crate::core::{Branch, Tree};
     use crate::logformat;
-    use crate::logger::writer::{LogWriter, LogStatus};
-    use crate::tasks::{Task, TaskSchedular, TasksExecutor, OpArcMutex};
+    use crate::logger::writer::{LogStatus, LogWriter};
+    use crate::tasks::{OpArcMutex, Task, TaskSchedular, TasksExecutor};
 
     #[derive(Clone, Debug)]
     pub enum BufferType {
@@ -119,10 +119,7 @@ pub mod interpreter {
 
             for action in fs_action_op {
                 let deferd = action.2;
-                let thread_logger = match op_logger.clone() {
-                    Some(logger) => Some(logger),
-                    None => None,
-                };
+                let thread_logger = op_logger.clone();
 
                 let task = Task::new(action, deferd, i, thread_logger);
                 i += 1;
@@ -131,11 +128,8 @@ pub mod interpreter {
 
             for action in cmd_action {
                 let defered = action.1;
-                let thread_logger = match op_logger.clone() {
-                    Some(logger) => Some(logger),
-                    None => None,
-                };
-                
+                let thread_logger = op_logger.clone();
+
                 let task = Task::new(action, defered, i, thread_logger);
                 i += 1;
                 tasks.push(task)
@@ -233,27 +227,26 @@ pub mod interpreter {
                     _ => return Err(InterpreterError::new(err, format!("found invalid token at {} in the demo section, all the valid tokens are COPY_INTO or DEFER", line + 1).as_str()))
                 };
                 if second_token != Token::CopyAction {
-                    return Err(InterpreterError::new(err, 
-                    format!("unable to interpret line {} in the demo section, found an unexpected token .", line+1).as_str()));
+                    return Err(
+                        InterpreterError::new(
+                            err,
+                            format!("unable to interpret line {} in the demo section, found an unexpected token .", line+1).as_str()));
                 }
 
                 if cfg!(target_os = "windows") {
                     let filtered = node
-                    .get_words()
-                    .iter()
-                    .map(|v| {
-                        // make it replace every variable
-                        v
-                    })
-                    .filter(|v| v.contains('/'))
-                    .map(|v| v.clone())
-                    .collect::<Vec<String>>();
-                
-                    if filtered.len() != 0 {
-                        return Err(InterpreterError::new(err,
-                        format!("make sure to use backslashes '\\' error occurs at {}", line)
+                        .get_words()
+                        .iter()
+                        .filter(|v| v.contains('/'))
+                        .cloned()
+                        .collect::<Vec<String>>();
+
+                    if !filtered.is_empty() {
+                        return Err(InterpreterError::new(
+                            err,
+                            format!("make sure to use backslashes '\\' error occurs at {}", line)
                                 .as_str(),
-                            ));
+                        ));
                     }
                 }
                 let args: Vec<String> = node
@@ -263,7 +256,7 @@ pub mod interpreter {
                         (Token::from(v.to_string()) != Token::CopyAction)
                             && (Token::from(v.to_string()) != Token::DeferAction)
                     })
-                    .map(|v| v.clone())
+                    .cloned()
                     .collect();
 
                 let command = CommandSerializer::new("copy".to_string(), args, defered);
@@ -286,7 +279,7 @@ pub mod interpreter {
                     return Err(InterpreterError::new(err, format!("unable to interpret at line {} in the directories section, found too mush tokens.", line).as_str()));
                 }
 
-                if words.len() == 3 && words[0].to_uppercase() != "DEFER".to_string() {
+                if words.len() == 3 && words[0].to_uppercase() != *"DEFER" {
                     return Err(InterpreterError::new(err, format!("Unvalid token at {}:0 in the directories section expected DEFER found {}",line + 1 ,words[0].clone()).as_str()));
                 }
 
@@ -342,7 +335,6 @@ pub mod interpreter {
         pub bool,
     );
 
-
     /// a named tuple to simplify the creatio of a file/directory
     ///
     /// simple format (path, is_file, defered)
@@ -380,14 +372,15 @@ pub mod interpreter {
         fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
             if self.stdout.is_empty() {
                 let status: String = LogStatus::Info.into();
-                let to_print = self.stderr.replace("\n", format!("\n{}", logformat!("", status)).as_str());
+                let to_print = self
+                    .stderr
+                    .replace('\n', format!("\n{}", logformat!("", status)).as_str());
                 write!(f, "{}", to_print)
             } else {
                 write!(f, "{}", self.stdout)
             }
         }
     }
-
 
     impl ExecutableCommand<CmdOut> for ExecutableTerminalCommand {
         #[cfg(target_os = "windows")]
@@ -420,7 +413,7 @@ pub mod interpreter {
                 Ok(out) => {
                     let out = CmdOut::new(out.stdout, out.stderr);
                     Some(out)
-                },
+                }
                 Err(e) => {
                     eprintln!("{e}");
                     None
@@ -467,6 +460,5 @@ pub mod interpreter {
 
             ExecutableTerminalCommand(serilized_args, self.defered)
         }
-
     }
 }

@@ -47,7 +47,7 @@ pub mod syntax_tree {
 
             for (idx, line) in file_data.iter().enumerate() {
                 if line.starts_with("__") {
-                    let sect_name = line.split(" ").collect::<Vec<&str>>()[0];
+                    let sect_name = line.split(' ').collect::<Vec<&str>>()[0];
 
                     let lines = file_data
                         .iter()
@@ -120,13 +120,13 @@ pub mod syntax_tree {
 
     impl Node {
         pub fn new(line: String) -> Self {
-            let first_keyword = line.split(" ").next().unwrap().to_string();
+            let first_keyword = line.split(' ').next().unwrap().to_string();
 
             let tkn = Token::from(first_keyword.clone());
 
             Node {
                 words: line
-                    .split(" ")
+                    .split(' ')
                     .map(|v| v.to_string())
                     .collect::<Vec<String>>(),
                 curren_tk_idx: 0,

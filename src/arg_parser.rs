@@ -4,7 +4,7 @@ pub mod args {
     pub fn get_args() -> Result<Options, ParsingError> {
         let args = args();
         if args.len() == 1 {
-            return Err(ParsingError::default())
+            return Err(ParsingError::default());
         }
 
         let cmd_args_vec: Vec<String> = args.collect();
@@ -24,14 +24,14 @@ pub mod args {
     }
 
     impl ParsingError {
-        pub fn no_args(&self) -> bool{
+        pub fn no_args(&self) -> bool {
             self.reason.is_empty()
         }
     }
 
     impl Display for ParsingError {
         fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-            write!(f ,"got error while parsing flags/args : {}", self.reason)
+            write!(f, "got error while parsing flags/args : {}", self.reason)
         }
     }
 
@@ -88,7 +88,7 @@ pub mod args {
             match value.as_str() {
                 str if str.starts_with("--task-num") || str.starts_with("--batch-size") => {
                     let flag = str
-                        .split("=")
+                        .split('=')
                         .map(|v| v.to_string())
                         .collect::<Vec<String>>();
                     if flag.len() == 1 {
@@ -149,7 +149,7 @@ pub mod args {
         pub fn get_batch_size_flag(&self) -> &usize {
             let size = self.task_num.unwrap_ref();
             if *size == 0 {
-                return &10;
+                &10
             } else {
                 size
             }
@@ -187,13 +187,12 @@ pub mod args {
                 flags_vec.push(flag)
             }
             let mut options: Options = Options::default();
-            options.file = None;
 
-            if file.len() != 0 {
+            if !file.is_empty() {
                 options.file = Some(file[0].clone());
             }
 
-            if self.args.len() == 0 {
+            if self.args.is_empty() {
                 return Err(ParsingError { reason: "no command has been passed, help: Existing commands; help, generate and new".to_owned() });
             }
 

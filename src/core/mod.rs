@@ -11,7 +11,7 @@ pub use token::token as Tokens;
 
 use self::Tokens::UnknownSectionError;
 
-pub fn construct_tree(file_data: Vec<String>) -> Result<Tree, UnknownSectionError>{
+pub fn construct_tree(file_data: Vec<String>) -> Result<Tree, UnknownSectionError> {
     Tree::construct(file_data)
 }
 

@@ -1,7 +1,7 @@
-use std::env;
-use std::sync::{Mutex, Arc};
-use std::{path::Path, fs};
 use chrono::Local;
+use std::env;
+use std::sync::{Arc, Mutex};
+use std::{fs, path::Path};
 
 use crate::generator::generate;
 use crate::{arg_parser::args::get_args, core::*, logger::writer::LogWriter};
@@ -14,8 +14,8 @@ pub mod core;
 pub mod generator;
 pub mod help;
 pub mod logger;
-pub mod tasks;
 pub mod macros;
+pub mod tasks;
 
 fn main() {
     // directory generator
@@ -33,9 +33,9 @@ fn main() {
     let parent = exe_dir.parent().unwrap();
 
     if !Path::new(format!("{}\\..\\logs\\", parent.display()).as_str()).exists() {
-        match fs::create_dir(format!("{}\\..\\logs\\", parent.display()).as_str()){
+        match fs::create_dir(format!("{}\\..\\logs\\", parent.display()).as_str()) {
             Ok(_) => (),
-            Err(e) => return eprintln!("{}", e) 
+            Err(e) => return eprintln!("{}", e),
         }
     };
 
@@ -48,63 +48,68 @@ fn main() {
 
             let error: String = LogStatus::Error.into();
             return println!("{}{e}", logformat!("", error));
-        },
+        }
     };
 
     match args.get_command() {
         CommandLineArgs::New => {
             let f = match args.get_file() {
-                Some(f) =>{
+                Some(f) => {
                     let info: String = LogStatus::Info.into();
-                    println!("{}initializing a new .tmplt file", logformat!("",info));
+                    println!("{}initializing a new .tmplt file", logformat!("", info));
                     fs::copy(format!("{}\\..\\etc\\default.tmplt", parent.display()), f)
-                },
+                }
                 None => {
                     let warn: String = LogStatus::Warning.into();
                     println!("{}", logformat!("if you would like to initialize a new .tmplt file with any other name dont forget to include the ext as a seconde argument", warn));
-                    println!("{}", logformat!("example: tmplt init first_look.tmplt", warn));
+                    println!(
+                        "{}",
+                        logformat!("example: tmplt init first_look.tmplt", warn)
+                    );
 
-                    fs::copy(format!("{}\\..\\etc\\default.tmplt", parent.display()), "new.tmplt")
+                    fs::copy(
+                        format!("{}\\..\\etc\\default.tmplt", parent.display()),
+                        "new.tmplt",
+                    )
                 }
             };
 
-            match f{
+            match f {
                 Ok(_) => {
                     let status: String = LogStatus::Info.into();
-                    return println!("{}", logformat!("initialized new template (tmplt) file, for more info consider reading the README.md file in the main repository", status))
+                    println!("{}", logformat!("initialized new template (tmplt) file, for more info consider reading the README.md file in the main repository", status))
                 }
                 Err(e) => {
                     let error: String = LogStatus::Error.into();
-                    return eprintln!("{}{e}", logformat!("", error))
+                    eprintln!("{}{e}", logformat!("", error))
                 }
             }
-        },
+        }
         CommandLineArgs::Generate => {
             let op_logger = if *args.get_save_logs_flag() {
                 let now = Local::now();
-        
-                Some(LogWriter::initialize_logger(format!("{}",now.format("%H:%M:%S"))))
-            }else { None };
-        
-            let logger = match op_logger {
-                Some(logger) => Some(Arc::new(Mutex::new(logger))),
-                None => None,
+
+                Some(LogWriter::initialize_logger(format!(
+                    "{}",
+                    now.format("%H:%M:%S")
+                )))
+            } else {
+                None
             };
+
+            let logger = op_logger.map(|logger| Arc::new(Mutex::new(logger)));
 
             generate(args.clone(), logger.clone());
 
-            match logger {
-                Some(logs) => {
-                    let logs = logs.lock().unwrap();
-        
-                    logs.write_to_file()
-                },
-                None => (),
+            if let Some(logs) = logger {
+                let logs = logs.lock().unwrap();
+
+                logs.write_to_file()
             }
-        },
+        }
         CommandLineArgs::Help => help::handle_help_command(parent),
         CommandLineArgs::UnknownArg => {
-            return eprintln!("unknown command, use tmplt help to get more info")
+            eprintln!("unknown command, use tmplt help to get more info")
         }
     }
 }

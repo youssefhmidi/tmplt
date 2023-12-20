@@ -4,7 +4,14 @@ pub mod task {
         sync::{Arc, Mutex},
     };
 
-    use crate::{core::ExecutableCommand, logger::writer::{LogWriter, LogStatus::{*, self}},logformat};
+    use crate::{
+        core::ExecutableCommand,
+        logformat,
+        logger::writer::{
+            LogStatus::{self, *},
+            LogWriter,
+        },
+    };
     // a Task struct has the information about the task
     // and it is giving to a TasksExecutor which execute tasks
     // by their ordered depending if its defered or not
@@ -37,7 +44,12 @@ pub mod task {
     }
 
     impl Task {
-        pub fn new<O, T>(execute: T, defered: bool, id: usize, mutex_logger: OpArcMutex<LogWriter>) -> Self
+        pub fn new<O, T>(
+            execute: T,
+            defered: bool,
+            id: usize,
+            mutex_logger: OpArcMutex<LogWriter>,
+        ) -> Self
         where
             O: Display,
             T: ExecutableCommand<O> + Clone + 'static + Sync + Send,
@@ -47,13 +59,10 @@ pub mod task {
                 Some(out) => {
                     let status: String = LogStatus::Info.into();
                     println!("{}", logformat!(out, status));
-                    match mutex_logger.clone() {
-                        Some(logger) => {
-                            let mut log = logger.lock().unwrap();
+                    if let Some(logger) = mutex_logger.clone() {
+                        let mut log = logger.lock().unwrap();
 
-                            log.write(format!("{out}"), Info)
-                        },
-                        None => (),
+                        log.write(format!("{out}"), Info)
                     }
                     None
                 }

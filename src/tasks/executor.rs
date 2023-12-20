@@ -22,12 +22,12 @@ pub mod task_executor {
 
     impl fmt::Debug for ExecutionError {
         fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-            write!(f ,"faild to execute batchs , found empty batch.")
+            write!(f, "faild to execute batchs , found empty batch.")
         }
     }
 
     pub fn execute_batch(batch: Vec<Task>) -> Result<ThreadResult, ExecutionError> {
-        if batch.len() == 0 {
+        if batch.is_empty() {
             return Err(ExecutionError);
         }
 
@@ -76,7 +76,7 @@ pub mod task_executor {
                 .take_while(|v| !v.defered || self.switch)
                 .collect();
 
-            if next_batch.len() == 0 {
+            if next_batch.is_empty() {
                 // we decrease it by one so if the switch is on in the next iteration it will return the
                 // defered tasks
                 self.current_iterations -= 1;
@@ -94,29 +94,29 @@ pub mod task_executor {
                     .clone()
                     .take_while(|v| !v.defered || self.switch)
                     .collect();
-                    // a filter if the batch size is bigger than tasks and to filter only defered tasks
-                    if self.switch {
-                        let mut filtered = next_batch
-                            .iter()
-                            .filter(|v| v.defered)
-                            .map(|v| v.to_owned())
-                            .collect::<Vec<Task>>();
-                        next_batch.clear();
-                        next_batch.append(&mut filtered);
-                    }
+                // a filter if the batch size is bigger than tasks and to filter only defered tasks
+                if self.switch {
+                    let mut filtered = next_batch
+                        .iter()
+                        .filter(|v| v.defered)
+                        .map(|v| v.to_owned())
+                        .collect::<Vec<Task>>();
+                    next_batch.clear();
+                    next_batch.append(&mut filtered);
+                }
 
                 let leftover_batch: Vec<Task> =
                     self._task_schedular.clone().filter(|t| t.defered).collect();
 
                 self.temp_buf = leftover_batch;
 
-                if self.temp_buf.len() != 0 && self.switch {
+                if !self.temp_buf.is_empty() && self.switch {
                     let temp = self.temp_buf.clone();
                     self.temp_buf.clear();
                     return Some(temp);
                 }
 
-                if next_batch.len() == 0 {
+                if next_batch.is_empty() {
                     return None;
                 }
 

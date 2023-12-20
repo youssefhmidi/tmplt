@@ -13,11 +13,7 @@ pub mod task_schedular {
     impl TaskSchedular {
         pub fn new(mut tasks: Vec<Task>) -> Self {
             let defered_buf: Vec<Task> = TaskSchedular::seperate_defered_tasks(&mut tasks);
-            let tasks: Vec<Task> = tasks
-                .iter()
-                .filter(|v| !v.defered)
-                .map(|v| v.clone())
-                .collect();
+            let tasks: Vec<Task> = tasks.iter().filter(|v| !v.defered).cloned().collect();
 
             if tasks.is_empty() {
                 let first_task = defered_buf[0].clone();
@@ -52,6 +48,10 @@ pub mod task_schedular {
 
         pub fn len(&self) -> usize {
             self.tasks.len() + self.defered_tasks_buf.len()
+        }
+
+        pub fn is_empty(&self) -> bool {
+            self.len() == 0
         }
     }
 

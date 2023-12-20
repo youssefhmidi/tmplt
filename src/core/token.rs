@@ -47,7 +47,7 @@ pub mod token {
                 "COPY" | "COPY_INTO" => CopyAction,
                 "DEFER" => DeferAction,
                 "=" => Assign,
-                str if str.starts_with("#") => Arg(str.to_string()),
+                str if str.starts_with('#') => Arg(str.to_string()),
                 &_ => Skip,
             }
         }

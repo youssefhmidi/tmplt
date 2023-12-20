@@ -15,11 +15,11 @@ pub mod parser {
         }
 
         pub fn parse_file(&self, dest: String) -> Result<Vec<String>, std::io::Error> {
-            let replaced = dest.replace("\\", "/");
-            let files = replaced.split("/").collect::<Vec<&str>>();
+            let replaced = dest.replace('\\', "/");
+            let files = replaced.split('/').collect::<Vec<&str>>();
             let file_name = files.last().unwrap_or(&"");
 
-            let ext = file_name.split(".").collect::<Vec<&str>>();
+            let ext = file_name.split('.').collect::<Vec<&str>>();
             if ext.len() != 2 {
                 // occurs when the file has more than one extension (i.e some.file.ext)
                 return Err(std::io::Error::new(
@@ -38,7 +38,7 @@ pub mod parser {
         }
 
         fn parse_data(&self, data: String) -> Vec<String> {
-            data.split("\n")
+            data.split('\n')
                 .map(|val| val.trim().to_string())
                 .filter(|val| !val.starts_with("//") && !val.is_empty())
                 .collect::<Vec<String>>()
