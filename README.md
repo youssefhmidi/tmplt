@@ -10,25 +10,13 @@
 </div>
 
 # table of index
-  **before reading if you  want to install it go check releases ;)**
+**before reading if you  want to install it go check releases ;)**
 
-- [table of index](#table-of-index)
-- [templating language for creating folders structures](#templating-language-for-creating-folders-structures)
-  - [Why?](#why)
 - [Getting started](#getting-started)
-  - [Installation (windows)](#installation-windows)
-  - [welcome to .tmplt](#welcome-to-tmplt)
 - [Syntax](#syntax)
-  - [CWD. current working directory section](#cwd-current-working-directory-section)
-    - [DEFER keyword](#defer-keyword)
-  - [DEMO.](#demo)
-  - [SCRIPTS.](#scripts)
-  - [VAR. well, here your variables are declared](#var-well-here-your-variables-are-declared)
 - [CLI command](#cli-command)
-  - [new/init command](#newinit-command)
-  - [generate command](#generate-command)
 - [tmplt internals](#tmplt-internals)
-- [a prefered way of using .tmplt](#a-prefered-way-of-using-tmplt)
+- [good practices in .tmplt](#good-practices-in-tmplt)
 - [self compiling / feedbacks](#self-compiling--feedbacks)
 
 > Side note: this is a side-project so I can learn rust even more
@@ -179,7 +167,21 @@ __SCRIPTS :
     go get #dep2
     ...
 ```
-with the previews example we told tmplt to run this commands in order -- 1 then 2 then 3 --
+
+As you can see comments are prefixed with 2 slash '//' and they take the entire line
+Which means you cant do things like:
+```
+__CWD:
+    // wrong way, wont run at all
+    FOLDER /cmd // this is a folder
+
+    // correct way
+    
+    // this is a folder
+    FOLDER /cmd
+``` 
+
+With the previews example we told tmplt to run this commands in order -- 1 then 2 then 3 --
 and for the last step, creating svelte kit, unfortunatly, I didn't find a way to programmatically make a sveltkit project,
 if you have a solution you can create an Issue / PR and I will merge it after reviewing it.
 
@@ -271,10 +273,11 @@ And we can visualize the syntax tree using the following image;
 In the first image you can see that there are 8 general steps:
   - 1: Reading the file the passed in the args nad constructing a syntax tree.
   - 2: Storing variables into a buffer. -- a hashmap of structure {var_name:var_value} --
-  - 3: Translating the commands in the tmplt file into terminal/fs actions --a terminal command, fs create file or folder or a fs copy--.
+  - 3: Translating the commands in the tmplt file into terminal/fs actions.
+    -- a terminal command, fs create file or folder or a fs copy --
   - 4: Storing variables and commands into a struct.
   - 5: Making a task buffers and serializing the commands and storing them to the buffer.
-  - 6: Executing batches of tasks asynchronously -the size of a batch is default to 10 and can be changed through a flag, see [this section](#generate-command)-
+  - 6: Executing batches of tasks asynchronously -- the size of a batch is default to 10 and can be changed through a flag, see [this section](#generate-command) --
   - 7 and 8: The actual execution and writing to stdout.
 
 
@@ -285,6 +288,93 @@ Syntax Tree terminology -- not to be confused with AST --
 **branches** : sections, and there are only 4.  
 **node** : a node is the entire line.  
 **token** : token represent a word
-# a prefered way of using .tmplt
+# good practices in .tmplt
+> These are not needed and are just rules to follow to be more "tmplty".
+## using multiple files
+Lets see an example using multiple tmplt files. consider the following directory:
+```bash
+...
+├───build.tmplt
+├───clear.tmplt
+├───clone.tmplt
+├───main-dir.tmplt
+...
+```
+Files description :
+
+In `build.tmplt`, it will contains our build commands , it looks similar to cmake for c/c++ but it isn't.  
+This file is going to have at most two sections `__VAR` and `__SCRIPTS`, it also may have the `__DEMO` section for moving/coping files.
+In `clear.tmplt`, it is going to have removing scripts ,git commands...  
+In `clone.tmplt`, the file is mostly `__DEMO` section code for moving and cloning.  
+And in `main-dir.tmplt` it will act as a blueprint to the entire workspace.
+
+### tmplt in tmplt:
+A big need to use tmplt command in a tmplt file arise when -- talking about previous example -- want to copy the workspace into another place.
+For example, the `clone.tmplt` file code will look somthing like this:
+```
+...
+__SCRIPTS:
+    ...
+    tmplt gen full/path/to/main-dir.tmplt --logged
+    ...
+...
+``` 
+You may noticed that we used the full path to the tmplt file. and the reason behind that is portability, in other words make it easy to use 
+the `clone.tmplt` file.
+
+Other reasons to use tmplt command inside tmplt file are the need for reusability and for readable tmplt files, as it is more easy to understand
+what `tmplt generate main-dir.tmplt` than to read a bunch of lines of FOLDER that and FILE this.
+
+> note: In the future, I'd probably do a rewrite and add some usefull other keywords
+> for example, for this usecase, I would want a Import() function to get the main-dir.tmplt into the clone.tmplt
+
+## sections order
+This also for readablity, because the order want matter for the tmplt interpreter, but the order will matter for us humans.
+As we are more likely to see 'variables/constants declaration then if/for/while/...' in any code (probably).  
+So following this concept, I personaly would make my tmplt file look like this.
+```
+__VAR :
+    // variables here
+
+__CWD :
+    // folders/file declaration here
+
+__DEMO :
+    // that COPY_INTO this
+
+__SCRIPTS :
+    // scripts here
+```
+
+the order of `__DEMO` and `__SCRIPTS` isn't that important, because as I read this file I'd want to know what variables we have and 
+what folders/files we going to use. as it make it easier for me to visualize the workspace more.
 
 # self compiling / feedbacks
+For the sake of simplicity, this project was developed/compiled in windows, I made some tries to make it corss-platform 'see this [file](https://github.com/youssefhmidi/tmplt/blob/main/src/core/interpreter.rs) at 392:5' but it was a bit too complex considering that I am still a beginner into systems programing. so I would highly appreciate any feedbacks / issues.
+
+To compile it yourself, first go to [releases](https://github.com/youssefhmidi/tmplt/releases/tag/v1.0.0) and download the self-compiling_guide.zip along with the source code.  
+The zip file contain this :
+```bash
+├──bin
+├──etc
+│  ├──default.tmplt
+│  ├──help.txt
+├──logs
+├──README.md #this readme
+├──LICENSE
+```
+
+After, clone this repository:
+```bash
+git clone https://github.com/youssefhmidi/tmplt.git
+```
+Compile it using cargo and then take the tmplt.exe binary and put it into the `/bin/` directory found in self-compiling_guide.zip
+
+Bonus step: add bin/ to your path envirement variables and then use this command:
+```bash
+tmplt
+```
+
+> All feedbacks will be appreciated here also.
+
+Don't forget to star this repo if you find this project helpful, interesting or just read the entire readme to this point :).
