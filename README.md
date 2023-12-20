@@ -232,11 +232,15 @@ usecases: file name, specifiy the file name along with the .tmplt extension. oth
 e.g.: `tmplt new filename.tmplt`
 
 ## generate command
-aliases: gen or g  
+aliases: gen or g 
+
 usage: interpret the file and generate te directory the file describes also runs the scrips/make files&folders and copy into files  
+
 flags: 
+
 --save-logs(alias --sl or --logged): default: false  
     save the commands output into logs. can be found in the directory if not found the logs folder get created
+
 example:
 ```bash
 tmplt generate template.tmplt --save-logs
@@ -244,8 +248,10 @@ tmplt generate template.tmplt --save-logs
 tmplt gen template.tmplt --logged
 ```     
 --batch-size(alias --task-num): default: 10  
+
     the tmplt execute commands (files/folders creation, scripts and coping demo files) asynchronously. a specified number of tasks 
     (also refered to as batches) get executed per thread.
+
 example:
 ```bash
 tmplt gen big-template.tmplt --batch-size=20
