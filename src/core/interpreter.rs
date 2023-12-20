@@ -227,10 +227,7 @@ pub mod interpreter {
                     _ => return Err(InterpreterError::new(err, format!("found invalid token at {} in the demo section, all the valid tokens are COPY_INTO or DEFER", line + 1).as_str()))
                 };
                 if second_token != Token::CopyAction {
-                    return Err(
-                        InterpreterError::new(
-                            err,
-                            format!("unable to interpret line {} in the demo section, found an unexpected token .", line+1).as_str()));
+                    return Err(InterpreterError::new(err,format!("unable to interpret line {} in the demo section, found an unexpected token .", line+1).as_str()));
                 }
 
                 if cfg!(target_os = "windows") {
