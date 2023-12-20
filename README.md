@@ -107,8 +107,8 @@ consider the following example:
 __CWD:
     FOLDER out\
     FOLDER include\
-    DEFER src\
-    DEFER src\.test\
+    DEFER FOLDER src\
+    DEFER FOLDER src\.test\
     FILE main.c
 ```
 the order of the execusion will be different, hence we will have the next order
